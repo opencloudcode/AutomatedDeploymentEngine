@@ -14,7 +14,7 @@ This is still a very early release and is worked on as and when I get time. Feed
 The main PowerShell module - this may get split out in the future in an attempt to provide a more succinct set of functionality.
 
 ### mtr.ADE.ConfigurationData
-Currently holding a single example of 'RoleInformation.psd1'. Part of the ADE process is;
+Currently holding a single example of 'RoleInformation.psd1'. Part of the mtr.ADE module is responsible for;
 
 * Create a list of nodes with information specific to the environment.
 ```powershell 
@@ -34,10 +34,11 @@ Currently holding a single example of 'RoleInformation.psd1'. Part of the ADE pr
 * Copy any keys from a matching role, into the node's information object
 * Export the merged object to a PSD1 file for later use
 
+### mtr.ADE.Deploy
+Will be responsible for the deployment of Virtual Machines. This may include uploading the module and configuration data 
+as artifacts for full deployment. 
 
-## The Work
-Currently, mtrade comprised mainly of PowerShell script and Desired State Configuration (DSC) resources. 
-
-For ease, this work is held in this single repository but ordered into Projects under a single Visual Studio Solution.  
-**This project may move away from Solution files in the near future to allow easier contributions from non Visual Studio environments**
-
+### mtr.ADE.Helpers
+Currently a set of helper and proxy scripts, making up the manual aspects of deployment. Over time, these should be 
+integrated into the main module and provide a fully automated experience. Although providing a set of operational 
+functions is also an aim of ADE
