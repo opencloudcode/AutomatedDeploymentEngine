@@ -1,15 +1,38 @@
-# mtrade
-The **L**ockheed **M**artin **A**utomated **D**eployment **E**ngine (mtrade) is a conceptual framework created by Edd Douse.
- 
-The purpose of this framework is to standardise the approach to automating the delivery of Infrastructure as a Service deployments 
-both On-Premises and in the Cloud.
+# Automated Deployment Engine (ADE)
+The aim of ADE is to simplify the process of Infrastructure deployments, agnostic to the hosting provider. 
+
+While services such as Azure provide a rich feature set to aid in the deployment and configuration of IaaS resources,  
+using such features cause vendor lock-in.  
+
+ADE is a configure first tool set, meaning that it relies heavily on the configuration files; currently PowerShell Data Files (.psd1).  
+
+This is still a very early release and is worked on as and when I get time. Feedback is appreciated but support may be slow.
 
 
-## mtrade Team
-The current team working on the mtrade framework is:
+## Project Layout
+### mtr.ADE
+The main PowerShell module - this may get split out in the future in an attempt to provide a more succinct set of functionality.
 
-Edd Douse (Me) - Infrastructure Consultant (Cloud Services) from the Coventry Office
-Carl Clarke - Senior Infrastructure Enginer (DevOps), also from the Conventry Office
+### mtr.ADE.ConfigurationData
+Currently holding a single example of 'RoleInformation.psd1'. Part of the ADE process is;
+
+* Create a list of nodes with information specific to the environment.
+```powershell 
+@(
+    @{
+        NodeName = 'MY-SERVER-01'
+        CertificatePath = '\\SomeServer\SomeShare\Certs\MY-SERVER-01.cer'
+        CertificateThumprint = 'A1C1ACACACACACACACACAC'
+    }
+    @{
+        ...
+    }
+)
+```
+
+* Look in RoleInformation for a match, based on MatchKey and MatchValue
+* Copy any keys from a matching role, into the node's information object
+* Export the merged object to a PSD1 file for later use
 
 
 ## The Work
@@ -18,16 +41,3 @@ Currently, mtrade comprised mainly of PowerShell script and Desired State Config
 For ease, this work is held in this single repository but ordered into Projects under a single Visual Studio Solution.  
 **This project may move away from Solution files in the near future to allow easier contributions from non Visual Studio environments**
 
-
-## Source Control
-This project is using Git as the version control system: Using Git allows for easier distribution, editing, and contribution compared to TSVC.
-
-Only the core team will have access to make changes in the Master branch, but anyone is welcome to clone this repository and make their own contribution.
-When done with your work, submit a pull request: This will be reviewed by the core team and, if successful, the changes will be merged into the master branch.
-
-
-Please take the time to review the [Coding and Design Standards document](Standards.md)  
-
-For help using Git with Visual Studio Team Services, take a look at [MSDN](https://www.visualstudio.com/en-us/get-started/code/gitquickstart)
-
-Happy coding!
