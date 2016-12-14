@@ -1,0 +1,58 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceGroupName": {
+        "type": "string", 
+        "metadata": {"description": "Name of parent Resource Group"}
+    },      
+    "resourceGrouplocation": {
+      "type": "string",
+      "metadata": {
+        "description": "A reference to a resource location"
+      }
+    },
+    "pipName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Prefix to use for resource names"
+      }
+    },
+    "pipSuffix": {
+      "type": "string",
+      "defaultValue": "-pip",
+      "metadata": {
+        "description": "Suffix to use for resource names"
+      }
+    },
+    "publicIPAddressDnsName": {
+      "type": "string",
+      "defaultValue": "[toLower(concat('pip-',uniqueString(resourceGroup().id)))]",
+      "metadata": {
+        "description": "DNS Name for Public IP Address"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(parameters('pipName'),parameters('pipSuffix'))]",
+      "location": "[parameters('resourceGroupLocation')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('publicIPAddressDnsName')]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "pipRef": {
+        "type": "object",
+        "value": "[reference(concat(parameters('pipName'),parameters('pipSuffix')))]"
+    }
+  }
+}

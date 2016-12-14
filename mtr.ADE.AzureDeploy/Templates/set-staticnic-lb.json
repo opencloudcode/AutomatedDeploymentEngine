@@ -1,0 +1,71 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {   
+    "resourceGroupName": {
+        "type": "string", 
+        "metadata": {"description": "Name of parent Resource Group"}
+    },      
+    "resourceGrouplocation": {
+      "type": "string",
+      "metadata": {
+        "description": "A reference to a resource location"
+      }
+    },      
+    "nicName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of Network Interface"
+      }
+    },
+    "subnetRef": {
+      "type": "string",
+      "defaultValue": "SubnetDefault",
+      "metadata": {
+        "description": "A reference to an existing subnet"
+      }
+    },
+    "ipAddress": {
+        "type": "string",
+        "metadata": {
+            "description" : "Single IP Address for NIC"
+        }
+    },
+    "lbID": {
+        "type": "string", 
+        "metadata": {
+            "description": "ID Reference of Load Balancer"
+        }
+    } 
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[parameters('nicName')]",
+      "location": "[parameters('resourceGroupLocation')]",
+      "dependsOn": [],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+                "privateIPAllocationMethod": "Static",
+                "privateIPAddress": "[parameters('ipAddress')]",
+                "subnet": {
+                    "id": "[parameters('subnetRef')]"
+                },
+                "loadBalancerBackendAddressPools": [
+                    {
+                        "id": "[concat(parameters('lbID'), '/backendAddressPools/BackendPool1')]"
+                    }
+                ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

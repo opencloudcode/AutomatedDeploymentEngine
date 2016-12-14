@@ -1,0 +1,45 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {   
+    "resourceGroupName": {
+        "type": "string", 
+        "metadata": {"description": "Name of parent Resource Group"}
+    },      
+    "resourceGrouplocation": {
+      "type": "string",
+      "metadata": {
+        "description": "A reference to a resource location"
+      }
+    },
+    "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the virtual machine to install the extensionß"
+      }
+    }  
+  },
+  "variables": {},
+  "resources": [
+      {
+        "name": "[concat(parameters('vmName'), '/', 'DscExtension')]",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "location": "[parameters('resourceGrouplocation')]",
+        "apiVersion": "2015-06-15",
+        "dependsOn": [
+        ],
+        "tags": {
+            "displayName": "WMF5"
+        },
+        "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+                "wmfVersion":"5.0"
+            }
+        }
+    }
+  ]
+}

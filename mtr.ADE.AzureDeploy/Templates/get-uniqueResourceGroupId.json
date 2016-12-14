@@ -1,0 +1,17 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+    "uniqueId": "[concat(toLower(replace(uniqueString(resourceGroup().id),'-','')))]"
+  },
+  "resources": [
+  ],
+    "outputs": {
+        "UniqueId": {
+            "type": "string",
+            "value": "[variables('uniqueId')]"
+        }
+    }
+}

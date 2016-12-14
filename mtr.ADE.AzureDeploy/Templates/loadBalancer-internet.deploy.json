@@ -1,0 +1,93 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+        "resourceGroupName": {
+            "type": "string", 
+            "metadata": {"description": "Name of parent Resource Group"}
+        },
+        "resourceGroupLocation": {
+            "type": "string",
+            "metadata": {"description": "Location of parent Resource Group"}
+        },      
+        "loadBalancerName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Prefix to use for resource names"
+            }
+        },
+        "publicIpAddressId":{
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Id for previously created Public IP, if required"
+            } 
+        }
+    },
+    "variables": {
+        "lbName" : "[parameters('loadBalancerName')]",
+        "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('lbName'))]",
+        "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/LoadBalancerFrontEnd')]",
+        "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/BackendPool1')]",
+        "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-05-01-preview",
+            "name": "[parameters('loadBalancerName')]",
+            "type": "Microsoft.Network/loadBalancers",
+            "location": "[parameters('resourceGroupLocation')]",
+            "dependsOn": [],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[parameters('publicIPAddressID')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "BackendPool1"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "defaultRule",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[variables('frontEndIPConfigID')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[variables('lbPoolID')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": 80,
+                            "backendPort": 80,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 5,
+                            "probe": {
+                                "id": "[variables('lbProbeID')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "defaultTcpProbe",
+                        "properties": {
+                        "protocol": "Tcp",
+                        "port": 80,
+                        "intervalInSeconds": 5,
+                        "numberOfProbes": 2
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
