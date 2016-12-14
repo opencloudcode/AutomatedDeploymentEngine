@@ -1,0 +1,56 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceGroupName": {
+        "type": "string", 
+        "metadata": {"description": "Name of parent Resource Group"}
+    },      
+    "resourceGrouplocation": {
+      "type": "string",
+      "metadata": {
+        "description": "A reference to a resource location"
+      }
+    },
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Account Type for Virtual Machines"
+      }
+    },
+    "storageAccountName": {
+        "type": "string",
+        "defaultValue": "newStorageAccount",
+        "metadata": {
+            "description": "Unique, lowercase, alpha-numeric name for storage account"
+        }
+    }  
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('storageAccountName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('resourceGroupLocation')]",
+      "tags":{
+        "displayName": "Storage Account"
+      },
+      "properties": {
+        "accountType": "[parameters('storageAccountType')]"
+      }
+    }
+  ],
+  "outputs": {
+      "storageAccountRef": {
+          "type": "object",
+          "value": "[reference(parameters('storageAccountName'))]"
+      }
+  }
+}

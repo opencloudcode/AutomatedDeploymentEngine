@@ -1,0 +1,71 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {  
+    "resourceGroupName": {
+        "type": "string", 
+        "metadata": {"description": "Name of parent Resource Group"}
+    },      
+    "resourceGrouplocation": {
+      "type": "string",
+      "metadata": {
+        "description": "A reference to a resource location"
+      }
+    },
+    "nicName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of Network Interface"
+      }
+    },
+    "nicSuffix": {
+      "type": "string",
+      "defaultValue": "-nic",
+      "metadata": {
+        "description": "Name of Network Interface"
+      }
+    },    
+    "instanceCount": {
+      "type" : "int",
+      "metadata": {
+        "description" : "Number of Nics to create"
+      }
+    },
+    "subnetRef": {
+      "type": "string",
+      "defaultValue": "SubnetDefault",
+      "metadata": {
+        "description": "A reference to an existing subnet"
+      }
+    }
+
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nicName'), '-', padLeft(copyIndex(1), 2, '0'),parameters('nicSuffix'))]",
+      "location": "[parameters('resourceGroupLocation')]",
+      "copy": {
+        "name" : "nicLoop",
+        "count" : "[parameters('instanceCount')]"
+      },
+      "dependsOn": [],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[parameters('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
