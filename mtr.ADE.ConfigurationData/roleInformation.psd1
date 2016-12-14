@@ -21,6 +21,7 @@
             Role = 'SQL Server Test Example'
             RoleGroup = 'Test Examples'
             RoleID = 'SQL'
+            AdComputerPath = 'OU=Computers, OU=SQL Servers, OU=Root' #Root DN is added if path doesn't end in domain DN
             SqlServer = @(
                 @{
                     SqlSourceFolder = 'SQL\SW_DVD9_SQL_Svr_Ent_Core_2014w_SP1_64Bit_English_-2_MLF_X20-28988'
