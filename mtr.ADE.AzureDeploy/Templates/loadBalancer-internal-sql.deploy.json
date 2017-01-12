@@ -57,7 +57,7 @@
                         "name": "defaultTcpProbe",
                         "properties": {
                         "protocol": "Tcp",
-                        "port": 1433,
+                        "port": 59999,
                         "intervalInSeconds": 5,
                         "numberOfProbes": 2
                         }
@@ -76,7 +76,7 @@
                             "protocol": "Tcp",
                             "frontendPort": 1433,
                             "backendPort": 1433,
-                            "enableFloatingIP": false,
+                            "enableFloatingIP": true,
                             "idleTimeoutInMinutes": 5,
                             "probe": {
                                 "id": "[variables('lbProbeID')]"
