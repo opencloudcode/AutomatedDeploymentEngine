@@ -26,7 +26,7 @@ function Get-RequiredPfxCertificateInformation{
         foreach ($Role in $RoleID) {
             #Get a list of hostnames requiring certificate
             $Hostnames = ((($RoleInformation |
-                             Where-Object {$_.RoleID -eq $Role}).WebSites.BindingInformation |
+                             Where-Object {$_.RoleID -eq $Role}).IISWebServer.WebSites.BindingInformation |
                              Where-Object {$_.CertificateRequired}).HostName | Get-Unique)
             
             foreach($Hostname in $Hostnames){
