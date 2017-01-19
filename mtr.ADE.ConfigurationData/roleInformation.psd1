@@ -65,7 +65,7 @@
 			RoleID = 'WEB'
             IISWebServer = @(
                 @{
-                    WebAppPools = @(
+                    AppPools = @(
                         @{
                             Name = 'AppPool'      
                         }
