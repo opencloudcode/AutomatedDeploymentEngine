@@ -77,7 +77,7 @@
                             "frontendPort": 80,
                             "backendPort": 80,
                             "enableFloatingIP": false,
-                            "idleTimeoutInMinutes": 1,
+                            "idleTimeoutInMinutes": 5,
                             "probe": {
                                 "id": "[variables('lbProbeID')]"
                             }
@@ -96,7 +96,7 @@
                             "frontendPort": 443,
                             "backendPort": 443,
                             "enableFloatingIP": false,
-                            "idleTimeoutInMinutes": 1,
+                            "idleTimeoutInMinutes": 5,
                             "probe": {
                                 "id": "[variables('lbProbeID')]"
                             }
