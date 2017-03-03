@@ -34,11 +34,14 @@ function Export-PowerShellDataFile{
     $outputFileExtn = "psd1"
 
     $OutputFile = Join-Path -Path $outputFilePath -ChildPath "$outputFileName.$outputFileExtn"# -Resolve
-    if((Test-Path $OutputFile) -and $UpdateExisting -ne $true){
-        $outPutFile = "$outPutFilePath\$outputFileName" + "_$(Get-Date -format 'yyyyMMdd-HHmmss').$outputFileExtn"
+    if(Test-Path $OutputFile){
+        $newFile = "$outPutFilePath\$outputFileName" + "_ReplacedAt_$(Get-Date -format 'yyyyMMdd-HHmmss').$outputFileExtn"
+        Write-Verbose "AllNodes Document Exists -> Renaming to '$newFile'"
+        Copy-Item -Path $OutputFile -Destination $newFile
+        Remove-Item $outputFile -Force
     }
 
-    $output | Out-File -FilePath $outputFile -Encoding utf8
+    $output | Out-File -FilePath $outputFile -Encoding ascii
     Write-Verbose "Processing completed successfully, data written to $outputFile"
 	Write-Output $outputFile
 }
