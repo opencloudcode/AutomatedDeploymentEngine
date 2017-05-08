@@ -49,7 +49,7 @@ function Copy-RemoteResource {
     )
 
     BEGIN {
-
+        $ErrorActionPreference
         foreach ($path in $LocalPath){
             if(-not(Test-Path -Path $path -PathType Container)){
                 if($Force -eq $true){
@@ -62,22 +62,12 @@ function Copy-RemoteResource {
                 }
             }
         }
-
-        if(-not $Error){
-            Write-Verbose "Creating PSDrive '$PSDriveName' for '$SourceShare'"
-            New-PSDrive -Name $PSDriveName -PSProvider FileSystem -Root $SourceShare -Credential $Credential
-        }
-
+        Write-Verbose "Creating PSDrive '$PSDriveName' for '$SourceShare'"
+        New-PSDrive -Name $PSDriveName -PSProvider FileSystem -Root $SourceShare -Credential $Credential
     }
 
     PROCESS {
-        if(-not(Test-Path $LocalPath)){
-            Write-Verbose "Destination '$LocalPath' does not exist. Will create"
-            $f = New-Item -ItemType Directory -Path $LocalPath
-            if($PassThru){
-                Write-Output $f
-            }
-        }
+
 
         Write-Verbose "Copying contents of '$SourceShare\$SourcePath' to '$LocalPath'"
         Copy-Item -Path (Join-Path -Path "$($PSDriveName):" -ChildPath $SourcePath) -Container:$Container -Destination $LocalPath -Recurse:$Recurse -Force:$force -PassThru:$PassThru

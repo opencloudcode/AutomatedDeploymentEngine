@@ -1,8 +1,5 @@
 function Get-RequiredPfxCertificateInformation{
     Param(
-        [Parameter(ParameterSetName = 'ByPath')]
-        [string]$RoleInformationPath,
-
         [Parameter(ParameterSetName = 'ByObject',
                    ValueFromPipelineByPropertyName = $true)]
         [object[]]$RoleInformation,
@@ -14,27 +11,23 @@ function Get-RequiredPfxCertificateInformation{
                    ValueFromPipelineByPropertyName = $true)]
         [object[]]$CertificateLibrary,
 
-        [Parameter(ParameterSetName = 'ByPath')]
-        [ValidateNotNullOrEmpty()]
-        [string]$Environment,
-        
         [Parameter(Mandatory = $true,
                    ValueFromPipeline = $true)]
-        [string[]]$RoleGroup
+        [string[]]$RoleID
     )
     Begin{
         if($PSCmdLet.ParameterSetName -eq 'ByPath'){
-            $RoleInformation = Import-PowerShellDataFile -Path $RoleInformationPath.$Environment
-            $CertificateLibrary = Import-PowerShellDataFile -Path $CertificateLibraryPath.$Environment 
+            $RoleInformation = Import-PowerShellDataFile -Path $RoleInformationPath.RoleInformation
+            $CertificateLibrary = Import-PowerShellDataFile -Path $CertificateLibraryPath.CertificateLibrary 
         }
         
     }
     Process{
-        foreach ($Item in $RoleGroup) {
+        foreach ($Role in $RoleID) {
             #Get a list of hostnames requiring certificate
             $Hostnames = ((($RoleInformation |
-                             ? {$_.RoleGroup -eq $Item}).WebSites.BindingInformation |
-                             ? {$_.CertificateRequired}).HostName | Get-Unique)
+                             Where-Object {$_.RoleID -eq $Role}).IISWebServer.WebSites.BindingInformation |
+                             Where-Object {$_.CertificateRequired}).HostName | Get-Unique)
             
             foreach($Hostname in $Hostnames){
                 $Cert = $CertificateLibrary.Where({$_.Hostname -eq $Hostname})
