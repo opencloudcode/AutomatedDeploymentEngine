@@ -30,7 +30,22 @@
         "metadata": {
             "description": "Unique, lowercase, alpha-numeric name for storage account"
         }
-    }, 
+    },
+    "KeySource": {
+      "type": "string",
+      "defaultValue": "Microsoft.Storage",
+      "metadata": {
+        "description": "Storage Account Encryption: Key Source"
+      }
+    },
+    "StorageKind": {
+      "type": "string",
+      "defaultValue": "Storage",
+      "allowedValues": [
+        "Storage", 
+        "BlobStorage"
+      ]
+    },
     "blobEncryptionEnabled": {
       "type": "bool", 
       "defaultValue": true,
@@ -52,10 +67,10 @@
       "sku": {
         "name": "[parameters('storageAccountType')]"
       },
-      "kind": "Storage",
+      "kind": "[parameters('StorageKind')]",
       "properties": {
         "encryption" : {
-          "keySource": "Microsoft.Storage", 
+          "keySource": "[parameters('KeySource')]", 
           "services" : {
             "blob" : {
               "enabled": "[parameters('blobEncryptionEnabled')]"
