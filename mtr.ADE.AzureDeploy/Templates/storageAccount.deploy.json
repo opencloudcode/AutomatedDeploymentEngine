@@ -6,7 +6,7 @@
         "type": "string", 
         "metadata": {"description": "Name of parent Resource Group"}
     },      
-    "resourceGrouplocation": {
+    "resourceGroupLocation": {
       "type": "string",
       "metadata": {
         "description": "A reference to a resource location"
@@ -26,24 +26,57 @@
     },
     "storageAccountName": {
         "type": "string",
-        "defaultValue": "newStorageAccount",
+        "defaultValue": "newstorageaccount",
         "metadata": {
             "description": "Unique, lowercase, alpha-numeric name for storage account"
         }
-    }  
+    },
+    "KeySource": {
+      "type": "string",
+      "defaultValue": "Microsoft.Storage",
+      "metadata": {
+        "description": "Storage Account Encryption: Key Source"
+      }
+    },
+    "StorageKind": {
+      "type": "string",
+      "defaultValue": "Storage",
+      "allowedValues": [
+        "Storage", 
+        "BlobStorage"
+      ]
+    },
+    "blobEncryptionEnabled": {
+      "type": "bool", 
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether or not to encrypt the storage account, providing secure data at rest."
+      }
+    }
   },
   "variables": {},
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('storageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('resourceGroupLocation')]",
       "tags":{
         "displayName": "Storage Account"
       },
+      "sku": {
+        "name": "[parameters('storageAccountType')]"
+      },
+      "kind": "[parameters('StorageKind')]",
       "properties": {
-        "accountType": "[parameters('storageAccountType')]"
+        "encryption" : {
+          "keySource": "[parameters('KeySource')]", 
+          "services" : {
+            "blob" : {
+              "enabled": "[parameters('blobEncryptionEnabled')]"
+            }
+          }
+        }
       }
     }
   ],
