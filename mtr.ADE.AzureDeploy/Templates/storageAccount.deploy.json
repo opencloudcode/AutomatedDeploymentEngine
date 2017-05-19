@@ -70,10 +70,10 @@
       "kind": "[parameters('StorageKind')]",
       "properties": {
         "encryption" : {
-          "keySource": "[parameters('KeySource')]", 
+          "keySource": "Microsoft.Storage",
           "services" : {
             "blob" : {
-              "enabled": "[parameters('blobEncryptionEnabled')]"
+              "enabled": true
             }
           }
         }
