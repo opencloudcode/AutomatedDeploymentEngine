@@ -25,14 +25,14 @@
         },
         "imageOffer": {
             "type": "string",
-            "defaultValue": "WindowsServer",
+            "defaultValue": "waf",
             "metadata": {"description": "Image Offer"}
         },
         "imageSKU": {
             "type": "string",
-            "defaultValue": "2012-R2-Datacenter",
+            "defaultValue": "byol",
             "allowedValues": [
-                "2012-R2-Datacenter"
+                "byol"
             ],
             "metadata": {"description": "Image SKU"}
         },
